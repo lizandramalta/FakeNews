@@ -30,8 +30,16 @@ class NoticeGeneration: ObservableObject {
 	func generateNoticeStreaming() async throws -> NoticeClass {
 		var noticeStruct = NoticeStruct(title: "", description: "")
 		var noticeClass = NoticeClass(title: "", nDescription: "")
+		let prompt = """
+			Gere um artigo de noticia ficional aleatorio.
+				- Foque nos mais variados tópicos: ciência, economia, tecnologia, saúde e entretenimento.
+				- Use um tom realista, como se fosse uma notícia real.
+				- Invente os nomes de instituições, lugares, pessoas e pode colocar notícias absurdas sem sentido.
+				- Os eventos devem ser ficcionais e absurdos.
+				- Nao repita as noticias
+			"""
 		
-		for try await partial in session.streamResponse(to: "Gere um artigo de noticia ficional aleatorio.", generating: NoticeStruct.self) {
+		for try await partial in session.streamResponse(to: prompt, generating: NoticeStruct.self) {
 			if let title = partial.content.title { noticeStruct.title = title }
 			if let description = partial.content.description { noticeStruct.description = description }
 			

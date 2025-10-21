@@ -16,5 +16,4 @@ struct NoticeStruct: Equatable {
 	
 	@Guide(description: "Breve parágrafo com detalhes do evento inventado, em tom jornalístico alarmante")
 	var description: String
-	
 }

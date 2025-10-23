@@ -1,28 +1,25 @@
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
 	
-	@Environment(\.modelContext) var modelContext
+    @Environment(NewsViewModel.self) private var vm
 	@Environment(\.dismiss) var dismiss
-	
-	@Query(sort: \NoticeClass.title) var notices: [NoticeClass]
 	
 	@StateObject private var generator = NoticeGeneration()
 	@State private var isLoading = false
 	@State private var errorMessage: String?
-	@State private var selectedNotice: NoticeClass?
+	@State private var selectedNotice: News?
 	
 	var body: some View {
 		NavigationStack {
-            VStack(spacing: 20) {//...
-				
-				// MARK: - Notícias
-				if notices.isEmpty {
-					Text("Toque em 'Gerar Notícia' para começar.")
-						.foregroundStyle(.secondary)
-						.multilineTextAlignment(.center)
-						.padding()
+			VStack(spacing: 20) {
+                if vm.isLoading {
+                    ProgressView("Carregando...")
+                } else if vm.news.isEmpty {
+                    Text("Toque em 'Gerar Notícia' para começar.")
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding()
 				} else {
 					VStack(alignment: .leading, spacing: 10) {
 						Text("Notícias")
@@ -31,7 +28,7 @@ struct ContentView: View {
 						
 						ScrollView(.horizontal, showsIndicators: false) {
 							HStack(spacing: 20) {
-								ForEach(notices) { notice in
+                                ForEach(vm.news) { notice in
 									Button {
 										selectedNotice = notice
 									} label: {
@@ -41,7 +38,7 @@ struct ContentView: View {
 												.foregroundStyle(.secondary)
 												.lineLimit(2)
 											
-											Text(notice.nDescription)
+											Text(notice.description)
 												.font(.subheadline)
 												.foregroundStyle(.secondary)
 												.lineLimit(3)
@@ -116,8 +113,10 @@ struct ContentView: View {
 		
 		do {
 			let newNotice = try await generator.generateNoticeStreaming()
-			modelContext.insert(newNotice)
-			try modelContext.save()
+			
+            Task {
+                await vm.add(news: newNotice)
+            }
 		} catch {
 			errorMessage = error.localizedDescription
 		}

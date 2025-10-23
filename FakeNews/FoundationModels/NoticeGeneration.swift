@@ -27,17 +27,17 @@ class NoticeGeneration: ObservableObject {
 		session = LanguageModelSession(instructions: instructions)
 	}
 	
-	func generateNoticeStreaming() async throws -> NoticeClass {
+	func generateNoticeStreaming() async throws -> News {
 		var noticeStruct = NoticeStruct(title: "", description: "")
-		var noticeClass = NoticeClass(title: "", nDescription: "")
-		
+        
+        var news = News(id: .init(recordName: UUID().uuidString), title: "", description: "")
 		for try await partial in session.streamResponse(to: "Gere um artigo de noticia ficional aleatorio.", generating: NoticeStruct.self) {
 			if let title = partial.content.title { noticeStruct.title = title }
 			if let description = partial.content.description { noticeStruct.description = description }
 			
-			noticeClass = NoticeClass(title: noticeStruct.title, nDescription: noticeStruct.description)
+            news = News(id: .init(recordName: UUID().uuidString), title: noticeStruct.title, description: noticeStruct.description)
 		}
 		
-		return noticeClass
+		return news
 	}
 }

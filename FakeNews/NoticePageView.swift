@@ -9,10 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct NoticePageView: View {
-	@Environment(\.modelContext) var modelContext
 	@Environment(\.dismiss) var dismiss
 	
-	var notice: NoticeClass
+	var notice: News
 	
 	var body: some View {
 		NavigationStack {
@@ -23,7 +22,7 @@ struct NoticePageView: View {
 						.foregroundStyle(.primary)
 					
 					GeometryReader { geometry in
-						JustifiedTextView(text: notice.nDescription)
+						JustifiedTextView(text: notice.description)
 							.frame(width: geometry.size.width)
 					}
 				}
@@ -34,7 +33,6 @@ struct NoticePageView: View {
 		.toolbar {
 			ToolbarItem(placement: .destructiveAction) {
 				Button {
-					modelContext.delete(notice)
 					dismiss()
 				} label: {
 					Image(systemName: "trash")
@@ -47,5 +45,5 @@ struct NoticePageView: View {
 
 
 #Preview {
-	NoticePageView(notice: NoticeClass(title: "Tile", nDescription: "Description"))
+    NoticePageView(notice: News(id: .init(recordName: UUID().uuidString), title: "Title", description: "Description"))
 }

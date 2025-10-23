@@ -35,16 +35,22 @@ struct ContentView: View {
 										VStack(alignment: .leading, spacing: 8) {
 											Text(notice.title)
 												.font(.headline)
-												.foregroundStyle(.secondary)
+                                                .fontWeight(.bold)
+												.foregroundStyle(.primary)
 												.lineLimit(2)
 											
+                                                .padding(.bottom, 3)
+                                            
 											Text(notice.description)
 												.font(.subheadline)
 												.foregroundStyle(.secondary)
-												.lineLimit(3)
+												.lineLimit(7)
+                                            
+                                            Spacer()
 										}
+                                        
 										.padding()
-										.frame(width: 300, height: 300 , alignment: .leading)
+										.frame(width: 300, height: 250 , alignment: .leading)
 										.background(Color(.systemGray6))
 										.cornerRadius(16)
 										.shadow(radius: 3, y: 2)

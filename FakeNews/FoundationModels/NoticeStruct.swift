@@ -11,10 +11,9 @@ import Foundation
 @Generable(description: "Gere um pequeno artigo de uma noticia aleatoria e ficcional")
 struct NoticeStruct: Equatable {
 	
-	@Guide(description: "Título da notícia curta, claro e impactante.")
+	@Guide(description: "Título da notícia super curto, claro e impactante.")
 	var title: String
 	
-	@Guide(description: "Breve parágrafo com detalhes do evento inventado, em tom jornalístico alarmante")
+	@Guide(description: "Breve parágrafo com detalhes do evento inventado, em tom jornalístico alarmante com uma média de 150-200 palavras")
 	var description: String
-	
 }

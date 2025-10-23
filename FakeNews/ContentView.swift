@@ -129,29 +129,21 @@ struct ContentView: View {
                     }
                 }
             }
-            
-            
         }
-        
     }
     
     private func generateNotice() async {
         isLoading = true
         errorMessage = nil
-        
         do {
             let newNotice = try await generator.generateNoticeStreaming()
-            
-            
             Task {
                 await vm.add(news: newNotice)
             }
         } catch {
             errorMessage = error.localizedDescription
         }
-        
         isLoading = false
-        
     }
 }
 

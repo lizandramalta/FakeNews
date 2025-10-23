@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 @main
 struct FakeNewsApp: App {
@@ -24,6 +25,13 @@ struct FakeNewsApp: App {
                 .environment(vm)
                 .onAppear {
                     push.requestNotificationPermissions()
+                }
+                .task {
+//                    try? Tips.resetDatastore()
+                    try? Tips.configure([
+//                        .displayFrequency(.immediate),
+                        .datastoreLocation(.applicationDefault)
+                    ])
                 }
         }
     }

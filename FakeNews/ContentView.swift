@@ -1,4 +1,5 @@
 import SwiftUI
+import TipKit
 
 struct ContentView: View {
     
@@ -11,6 +12,9 @@ struct ContentView: View {
     @State private var selectedNotice: News?
     
     @State var flushUI: Bool = false
+    
+    let createNewReportTip = CreateNewReport()
+    let seeMoreReportsTip = SeeMoreReports()
     
     var body: some View {
         NavigationStack {
@@ -27,6 +31,7 @@ struct ContentView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Notícias")
                                 .font(.title2.bold())
+                                .padding(.horizontal)
                             
                             if vm.news.isEmpty {
                                 Text("Toque em 'Gerar Notícia' para começar.")
@@ -34,11 +39,14 @@ struct ContentView: View {
                                     .multilineTextAlignment(.center)
                                     .padding()
                             } else {
+                                TipView(seeMoreReportsTip)
+                                    .tipBackground(.gray.opacity(0.2))
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 20) {
                                         ForEach(vm.news) { notice in
                                             Button {
                                                 selectedNotice = notice
+                                                Task { await SeeMoreReports.tapReportEvent.donate()}
                                             } label: {
                                                 VStack(alignment: .leading, spacing: 8) {
                                                     Text(notice.title)
@@ -104,7 +112,7 @@ struct ContentView: View {
                             Task {
                                 await generateNotice()
                             }
-                            
+                            createNewReportTip.invalidate(reason: .actionPerformed)
                         }) {
                             if isLoading {
                                 ProgressView()
@@ -115,6 +123,7 @@ struct ContentView: View {
                         }
                         .buttonStyle(.borderedProminent)
                         .disabled(isLoading)
+                        .popoverTip(createNewReportTip)
                     }
                     
                     .padding()
@@ -129,6 +138,9 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            Task { await SeeMoreReports.viewReportEvent.donate()}
         }
     }
     

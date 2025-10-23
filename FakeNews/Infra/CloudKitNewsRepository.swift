@@ -11,6 +11,7 @@ protocol NewsRepository {
     func checkAvailability() async -> CloudKitStatus
     func fetchAll() async throws -> [News]
     func add(_ news: News) async throws -> Void
+    func delete(_ news: News) async throws -> Void
 }
 
 final class CloudKitNewsRepository: NewsRepository {
@@ -33,5 +34,9 @@ final class CloudKitNewsRepository: NewsRepository {
     
     func add(_ news: News) async throws {
         try await ck.save(news.toRecord())
+    }
+    
+    func delete(_ news: News) async throws {
+        try await ck.delete(news.id)
     }
 }

@@ -17,6 +17,8 @@ protocol CloudKitClient {
     func query(_ query: CKQuery,
                desiredKeys: [String]?) async throws -> [CKRecord]
     
+    func delete (_ recordID: CKRecord.ID) async throws -> Void
+    
     var publicDB: CKDatabase { get }
 }
 
@@ -45,6 +47,18 @@ final class DefaultCloudKitClient: CloudKitClient {
     func save(_ record: CKRecord) async throws -> Void {
         try await publicDB.save(record)
     }
+    
+    func delete(_ recordID: CKRecord.ID) async throws -> Void {
+            try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+                publicDB.delete(withRecordID: recordID) { _, error in
+                    if let error {
+                        cont.resume(throwing: error)
+                    } else {
+                        cont.resume(returning: ())
+                    }
+                }
+            }
+        }
     
     func query(_ query: CKQuery,
                desiredKeys: [String]? = nil) async throws -> [CKRecord] {

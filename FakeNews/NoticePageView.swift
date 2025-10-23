@@ -10,6 +10,7 @@ import SwiftData
 
 struct NoticePageView: View {
 	@Environment(\.dismiss) var dismiss
+    @Environment(NewsViewModel.self) var vm
 	
 	var notice: News
 	
@@ -33,7 +34,10 @@ struct NoticePageView: View {
 		.toolbar {
 			ToolbarItem(placement: .destructiveAction) {
 				Button {
-					dismiss()
+                    Task {
+                        await vm.delete(news: notice)
+                        //dismiss()
+                    }
 				} label: {
 					Image(systemName: "trash")
 						.foregroundStyle(.red)

@@ -36,7 +36,7 @@ struct NoticePageView: View {
 				Button {
                     Task {
                         await vm.delete(news: notice)
-                        //dismiss()
+                        dismiss()
                     }
 				} label: {
 					Image(systemName: "trash")

@@ -31,17 +31,6 @@ struct BarChartView: View {
 				.foregroundColor(.secondary)
 				.padding(.bottom, 12)
 			
-			
-			//            Chart{ //criado o grafico a partir dos dados da matriz que criamos
-//            ZoomChart(
-//                xFullRange: mockData.first!.date...mockData.last!.date,
-//                yFullRange: 0...mockData.map { $0.viewCount }.max()!
-//            ) {
-//            ClickChart(selectedDate: $rawSelectionDate, onTap: { date in
-//                // Aqui você coloca a ação de navegação
-//                print("Barra clicada em: \(date)")
-//                // Exemplo: navegar para outra View usando NavigationStack
-//            }) {
 			Chart{
 					//criando um if para a UI das barras de quando selecionamos cada uma:
 					if let selectedViewMonth {
@@ -82,11 +71,7 @@ struct BarChartView: View {
 			.frame(height: 180)  //definindo um tamanho para o gráfico
 			
 			//criando o drang in drop que passa por cima de cada barra do grafico:
-			.chartXSelection(value: $rawSelectionDate.animation(.easeInOut)) //a animacao é bem minima para mudar a interface quando passa pelas barras mas sem a condicao de cima essa animação n funciona
-			//            //para fins de testes e ver se ta funcionando o drang in drop
-			//            .onChange(of: selectedViewMonth?.viewCount, { oldValue, newValue in
-			//                print(newValue)
-			//            })
+			.chartXSelection(value: $rawSelectionDate.animation(.easeInOut)) 
 		}
 			
 			.chartXAxis{ //personaliza o eixo X

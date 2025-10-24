@@ -88,15 +88,20 @@ struct ContentView: View {
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
-                                    // Você pode adicionar vários gráficos aqui
-                                    ForEach(0..<3, id: \.self) { _ in
+                                   
                                         BarChartView()
-                                            .padding(10)
-                                            .frame(width: 300, height: 300)
-                                            .background(Color(.systemGray6))
-                                            .cornerRadius(16)
-                                            .shadow(radius: 3, y: 2)
-                                    }
+                                            .chartContainerStyle()
+                                        LineChartView()
+                                            .chartContainerStyle()
+                                        PointChartView()
+                                            .chartContainerStyle()
+                                        AreaChartView()
+                                            .chartContainerStyle()
+                                        RectangleChartView()
+                                            .chartContainerStyle()
+                                        DonutChartView()
+                                            .chartContainerStyle()
+
                                 }
                                 .padding(.horizontal)
                             }
@@ -156,6 +161,17 @@ struct ContentView: View {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+}
+//extensão criada para personalizar a vizualizacao do gráfico:
+extension View {
+    func chartContainerStyle() -> some View {
+        self
+            .padding(10)
+            .frame(width: 300, height: 300)
+            .background(Color(.systemGray6))
+            .cornerRadius(16)
+            .shadow(radius: 3, y: 2)
     }
 }
 
